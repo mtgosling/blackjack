@@ -39,16 +39,16 @@ export const BlackjackTemplate = ({
             </BlackjackHeader>
             <GameAreaBackground>
                 <GameAreaInner>
-                    <DealingButtons>
+                    <ButtonsRow>
                         <Button variant="primary" onClick={beginGame} disabled={gameStarted}>Begin</Button>
                         <Button variant="secondary" onClick={reset}>Reset</Button>
-                    </DealingButtons>
+                    </ButtonsRow>
 
                     {gameStarted && (
-                        <DealingButtons>
+                        <ButtonsRow>
                             <Button variant="primary" onClick={dealToPlayer} disabled={(playerScore >= 17) || (winner !== null)}>Deal to Macs</Button>
                             <Button variant="primary" onClick={dealToDealer} disabled={(playerScore < 17) || (winner !== null)}>Deal to Dealer</Button>
-                        </DealingButtons>
+                        </ButtonsRow>
                     )}
                     
                     {winner && (
@@ -93,7 +93,7 @@ const BlacjackWrapper = styled.div`
 
 const BlackjackHeader = styled.div`
     width: 100%;
-    heigh: 100px;
+    height: 100px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -107,8 +107,8 @@ const GameAreaBackground = styled.div`
 
 const GameAreaInner = styled.div`
     margin: 0 auto;
+    padding-top: 20px;
 `;
-
 
 const DeckWrapper = styled.div`
     display: flex;
@@ -117,7 +117,7 @@ const DeckWrapper = styled.div`
     > div {
         width: 76%;
     }
-`
+`;
 
 const HandsWrapper = styled.div`
     display: flex;
@@ -125,7 +125,6 @@ const HandsWrapper = styled.div`
     justify-content: space-around;
     flex-direction: row;
     width: 80%;
-
 
     > div {
         width: 45%;
@@ -138,10 +137,14 @@ const Result = styled.div`
     margin: 0 auto;
 `;
 
-const DealingButtons = styled.div`
-    padding: 10px;
+const ButtonsRow = styled.div`
+    display: flex;
+    justify-content: center;
+    padding-bottom: 20px;
+    margin: 0 auto;
 
     > button {
         margin: 0 10px;
+        width: 140px;
     }
 `;

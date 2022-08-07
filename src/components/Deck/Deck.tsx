@@ -10,7 +10,7 @@ interface DeckProps {
 
 /**
  * Deck component, displaying all cards remaining in the deck
- * Can reveal the cards to show that they are shuffled
+ *  - Can reveal the cards to show that they are shuffled
  */
 export const Deck = ({deck}: DeckProps) => {
     const [showCards, setShowCards] = useState<boolean>(false);

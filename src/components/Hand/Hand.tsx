@@ -10,8 +10,6 @@ interface HandProps {
 }
 
 export const Hand = ({ cards, flipped, playerName, score }: HandProps) => {
-    
-
     return (
         <HandWrapper>
             <h4>{playerName}</h4>

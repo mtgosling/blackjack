@@ -102,6 +102,9 @@ export const Blackjack = () => {
         dealCard(deck, dealerHand, setDealerHand);
     }   
 
+    /**
+     * Rests game state so it can be started again
+     */  
     const reset = () => {
         setDeck(generateDeck());
         setPlayerHand([]);
@@ -110,6 +113,9 @@ export const Blackjack = () => {
         setGameStarted(false);
     }
 
+    /**
+     * begins the game and sets intial game state
+     */  
     const BeginGame = () => {
         setGameStarted(true);
         
@@ -132,7 +138,6 @@ export const Blackjack = () => {
 
         setDeck(shuffledDeck.slice(4));
     }
-
 
     useEffect(() => {
         if (deck.length === 0) {

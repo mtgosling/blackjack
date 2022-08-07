@@ -6,6 +6,10 @@ interface CardProps {
     flipped: boolean;
 }
 
+/**
+ * Base card component 
+ *  - will show either card face or back depending on props 
+ */
 export const Card = ({ card, flipped}: CardProps) => {
     const imgPath = flipped ? 'cards/back.png' : `cards/${ card.value }_of_${ card.suit }.png`;
     // This uses stock playing card images made available by google, you can find them in public/cards
