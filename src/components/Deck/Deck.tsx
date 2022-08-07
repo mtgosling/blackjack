@@ -8,19 +8,21 @@ interface DeckProps {
     deck: CardDetail[];
 }
 
+/**
+ * Deck component, displaying all cards remaining in the deck
+ * Can reveal the cards to show that they are shuffled
+ */
 export const Deck = ({deck}: DeckProps) => {
     const [showCards, setShowCards] = useState<boolean>(false);
 
     return (
         <DeckWrapper>
-            <h3>Deck</h3>
-            <div>
-                <Button onClick={() => setShowCards(!showCards)}>Reveal Deck</Button>
-            </div>
+            <h4>Deck</h4>
+            <Button onClick={() => setShowCards(!showCards)}>Reveal Deck</Button>
             <Cards>
-            {deck.map((card) => (
+                {deck.map((card) => (
                     <Card key={card.id} card={card} flipped={!showCards} />
-            ))}
+                ))}
             </Cards>
 
         </DeckWrapper>

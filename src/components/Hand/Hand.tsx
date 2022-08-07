@@ -6,21 +6,20 @@ interface HandProps {
     playerName: string;
     cards: CardDetail[];
     flipped: boolean;
+    score: number;
 }
 
-export const Hand = ({ cards, flipped,playerName }: HandProps) => {
-    const score = cards.reduce((total, card) => total + card.score, 0);
+export const Hand = ({ cards, flipped, playerName, score }: HandProps) => {
+    
 
     return (
         <HandWrapper>
-            <div>{playerName}</div>
+            <h4>{playerName}</h4>
             <div>Score: {score}</div>
             <Cards>{cards.map((card) => (
                     <Card key={card.id} card={card} flipped={flipped} />
             ))}</Cards>
-            
         </HandWrapper>
-
     )
 }
 

@@ -13,6 +13,10 @@ export interface CardDetail {
 
 /**
  * Base Blackjack page that contains majority of logic
+ * 
+ * Possible areas of expansion:
+ *  - Bets
+ *  - Record of previous results
  */
 export const Blackjack = () => {
     const [deck, setDeck] = useState<CardDetail[]>([])
@@ -120,7 +124,7 @@ export const Blackjack = () => {
             setWinner("Macs");
         }
         if(playerHandScore !== 21 && dealerHandScore === 21) {
-            setWinner("Dealer");
+            setWinner("The Dealer");
         }
         if (playerHandScore === 21 && dealerHandScore === 21) {
             setWinner("Draw")
@@ -138,20 +142,20 @@ export const Blackjack = () => {
 
     useEffect(() => {
         if (playerScore > 21) {
-            setWinner("Dealer");
+            setWinner("The Dealer");
         }
 
+        if (playerScore === 21) {
+            setWinner("Macs");
+        }
 
-    }, [playerScore]);
-
-    useEffect(() => {
         if (dealerScore > 21) {
             setWinner("Macs");
             return;
         }
 
         if (playerScore >= 17 && dealerScore > playerScore ) {
-            setWinner("Dealer")
+            setWinner("The Dealer")
         }
     }, [dealerScore, playerScore])
 

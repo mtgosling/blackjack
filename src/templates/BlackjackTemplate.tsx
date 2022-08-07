@@ -2,7 +2,7 @@ import { Hand } from "../components/Hand"
 import { Deck } from "../components/Deck"
 import styled from "styled-components"
 import { CardDetail } from "../pages/Blackjack"
-import {Button} from "react-bootstrap";
+import {Button, Alert} from "react-bootstrap";
 
 interface BlackjackTemplateProps {
     deck: CardDetail[];
@@ -26,7 +26,8 @@ export const BlackjackTemplate = ({
     dealToPlayer, 
     dealToDealer, 
     reset, 
-    playerScore, 
+    playerScore,
+    dealerScore,
     winner, 
     gameStarted
 }: BlackjackTemplateProps) => {
@@ -37,37 +38,47 @@ export const BlackjackTemplate = ({
                 <p>This app allows you to play a simple game of Blackjack</p>
             </BlackjackHeader>
             <GameAreaBackground>
-                <Result>
-                    {winner && `The winner is ${winner}`}
-                </Result>
-                
-                <div>
-                    <Button variant="primary" onClick={beginGame} disabled={gameStarted}>Begin</Button>
-                    <Button variant="secondary" onClick={reset}>Reset</Button>
-                </div>
+                <GameAreaInner>
+                    <DealingButtons>
+                        <Button variant="primary" onClick={beginGame} disabled={gameStarted}>Begin</Button>
+                        <Button variant="secondary" onClick={reset}>Reset</Button>
+                    </DealingButtons>
 
-                <div>
-                    <Button variant="primary" onClick={dealToPlayer} disabled={(playerScore >= 17) || (winner !== null)}>Deal to Macs</Button>
-                    <Button variant="primary" onClick={dealToDealer} disabled={(playerScore < 17) || (winner !== null)}>Deal to Dealer</Button>
-                </div>
+                    {gameStarted && (
+                        <DealingButtons>
+                            <Button variant="primary" onClick={dealToPlayer} disabled={(playerScore >= 17) || (winner !== null)}>Deal to Macs</Button>
+                            <Button variant="primary" onClick={dealToDealer} disabled={(playerScore < 17) || (winner !== null)}>Deal to Dealer</Button>
+                        </DealingButtons>
+                    )}
+                    
+                    {winner && (
+                        <Result>
+                            <Alert>
+                                {winner === "draw" ? `its a draw` : `The winner is ${winner}`}
+                            </Alert>
+                        </Result>
+                    )}
 
-                <HandsWrapper>
-                    <Hand 
-                        playerName="Macs"
-                        cards={playerHand}
-                        flipped={false}
-                    />
-                    <Hand 
-                        playerName="Dealer"
-                        cards={dealerHand}
-                        flipped={false}
-                    />
-                </HandsWrapper>
-                <DeckWrapper>
-                    <Deck
-                        deck={deck}
-                    />
-                </DeckWrapper>
+                    <HandsWrapper>
+                        <Hand 
+                            playerName="Macs"
+                            cards={playerHand}
+                            flipped={false}
+                            score={playerScore}
+                        />
+                        <Hand 
+                            playerName="Dealer"
+                            cards={dealerHand}
+                            flipped={false}
+                            score={dealerScore}
+                        />
+                    </HandsWrapper>
+
+                    <DeckWrapper>
+                        <Deck deck={deck} />
+                    </DeckWrapper>
+                </GameAreaInner>
+
             </GameAreaBackground>
         </BlacjackWrapper>
     )
@@ -94,25 +105,43 @@ const GameAreaBackground = styled.div`
     flex-grow: 1;
 `;
 
+const GameAreaInner = styled.div`
+    margin: 0 auto;
+`;
+
+
 const DeckWrapper = styled.div`
     display: flex;
     justify-content: center;
 
     > div {
-        width: 80%;
+        width: 76%;
     }
 `
 
 const HandsWrapper = styled.div`
     display: flex;
-    margin-bottom: 20px;
+    margin: 0 auto 20px;
     justify-content: space-around;
+    flex-direction: row;
+    width: 80%;
+
 
     > div {
-        width: 30%;
+        width: 45%;
     }
 `;
 
 const Result = styled.div`
     padding: 10px;
+    max-width: 300px;
+    margin: 0 auto;
+`;
+
+const DealingButtons = styled.div`
+    padding: 10px;
+
+    > button {
+        margin: 0 10px;
+    }
 `;
