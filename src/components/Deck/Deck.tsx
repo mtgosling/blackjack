@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { CardDetail } from "../../pages/Blackjack";
 import { Card} from "../Card";
 import { useState} from "react";
+import { Button } from "react-bootstrap";
 
 interface DeckProps {
     deck: CardDetail[];
@@ -14,7 +15,7 @@ export const Deck = ({deck}: DeckProps) => {
         <DeckWrapper>
             <h3>Deck</h3>
             <div>
-                <button onClick={() => setShowCards(!showCards)}>Reveal Deck</button>
+                <Button onClick={() => setShowCards(!showCards)}>Reveal Deck</Button>
             </div>
             <Cards>
             {deck.map((card) => (
@@ -36,5 +37,5 @@ const Cards = styled.div`
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    margin: 0 auto;
+    margin: 20px auto 0;
 `

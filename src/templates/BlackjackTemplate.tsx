@@ -2,15 +2,34 @@ import { Hand } from "../components/Hand"
 import { Deck } from "../components/Deck"
 import styled from "styled-components"
 import { CardDetail } from "../pages/Blackjack"
+import {Button} from "react-bootstrap";
 
 interface BlackjackTemplateProps {
     deck: CardDetail[];
     playerHand: CardDetail[];
     dealerHand: CardDetail[];
     beginGame: () => void;
+    dealToPlayer: () => void;
+    dealToDealer: () => void;
+    playerScore: number;
+    dealerScore: number;
+    reset: () => void;
+    winner: string | null;
+    gameStarted: boolean;
 }
 
-export const BlackjackTemplate = ({deck, playerHand, dealerHand, beginGame}: BlackjackTemplateProps) => {
+export const BlackjackTemplate = ({
+    deck, 
+    playerHand, 
+    dealerHand, 
+    beginGame, 
+    dealToPlayer, 
+    dealToDealer, 
+    reset, 
+    playerScore, 
+    winner, 
+    gameStarted
+}: BlackjackTemplateProps) => {
     return (
         <BlacjackWrapper>
             <BlackjackHeader>
@@ -18,9 +37,18 @@ export const BlackjackTemplate = ({deck, playerHand, dealerHand, beginGame}: Bla
                 <p>This app allows you to play a simple game of Blackjack</p>
             </BlackjackHeader>
             <GameAreaBackground>
+                <Result>
+                    {winner && `The winner is ${winner}`}
+                </Result>
+                
                 <div>
-                    <button onClick={beginGame}>Begin</button>
-                    <button>Hit</button>
+                    <Button variant="primary" onClick={beginGame} disabled={gameStarted}>Begin</Button>
+                    <Button variant="secondary" onClick={reset}>Reset</Button>
+                </div>
+
+                <div>
+                    <Button variant="primary" onClick={dealToPlayer} disabled={(playerScore >= 17) || (winner !== null)}>Deal to Macs</Button>
+                    <Button variant="primary" onClick={dealToDealer} disabled={(playerScore < 17) || (winner !== null)}>Deal to Dealer</Button>
                 </div>
 
                 <HandsWrapper>
@@ -83,4 +111,8 @@ const HandsWrapper = styled.div`
     > div {
         width: 30%;
     }
+`;
+
+const Result = styled.div`
+    padding: 10px;
 `;

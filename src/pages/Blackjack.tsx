@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { BlackjackTemplate } from "../templates/BlackjackTemplate";
 
 const suits = ['hearts', 'diamonds', 'clubs', 'spades'];
@@ -18,6 +18,10 @@ export const Blackjack = () => {
     const [deck, setDeck] = useState<CardDetail[]>([])
     const [playerHand, setPlayerHand] = useState<CardDetail[]>([]);
     const [dealerHand, setDealerHand] = useState<CardDetail[]>([]);
+    const playerScore = playerHand.reduce((total, card) => total + card.score, 0);
+    const dealerScore = dealerHand.reduce((total, card) => total + card.score, 0);
+    const [winner, setWinner] = useState<string | null>(null);
+    const [gameStarted, setGameStarted] = useState<boolean>(false);
     
     /**
      * Generate the initial ordered deck
@@ -72,7 +76,7 @@ export const Blackjack = () => {
      *
      * It also removes the dealt card from the deck.
      */
-    const dealCard = (deck: CardDetail[], hand: CardDetail[], setHand: (val: CardDetail[]) => {}) => {
+    const dealCard = (deck: CardDetail[], hand: CardDetail[], setHand: (val: CardDetail[]) => void) => {
         const topCard = deck[0];
         let tempDeck = deck;
         let tempHand = hand;
@@ -86,19 +90,45 @@ export const Blackjack = () => {
         setHand([...tempHand]);
     }
 
+    const dealToPlayer = () => {
+        dealCard(deck, playerHand, setPlayerHand);
+    }   
+
+    const dealToDealer = () => {
+        dealCard(deck, dealerHand, setDealerHand);
+    }   
+
     const reset = () => {
         setDeck(generateDeck());
         setPlayerHand([]);
         setDealerHand([]);
+        setWinner(null);
+        setGameStarted(false);
     }
 
     const BeginGame = () => {
+        setGameStarted(true);
+        
         const shuffledDeck = shuffleDeck(deck);
         setPlayerHand([shuffledDeck[0], shuffledDeck[1]]); 
         setDealerHand([shuffledDeck[2], shuffledDeck[3]]);
 
+        const playerHandScore = shuffledDeck[0].score + shuffledDeck[1].score;
+        const dealerHandScore = shuffledDeck[2].score + shuffledDeck[3].score;
+
+        if(playerHandScore === 21 && dealerHandScore !== 21) {
+            setWinner("Macs");
+        }
+        if(playerHandScore !== 21 && dealerHandScore === 21) {
+            setWinner("Dealer");
+        }
+        if (playerHandScore === 21 && dealerHandScore === 21) {
+            setWinner("Draw")
+        }
+
         setDeck(shuffledDeck.slice(4));
     }
+
 
     useEffect(() => {
         if (deck.length === 0) {
@@ -106,12 +136,39 @@ export const Blackjack = () => {
         }
     }, [deck]);
 
+    useEffect(() => {
+        if (playerScore > 21) {
+            setWinner("Dealer");
+        }
+
+
+    }, [playerScore]);
+
+    useEffect(() => {
+        if (dealerScore > 21) {
+            setWinner("Macs");
+            return;
+        }
+
+        if (playerScore >= 17 && dealerScore > playerScore ) {
+            setWinner("Dealer")
+        }
+    }, [dealerScore, playerScore])
+
+
     return (
         <BlackjackTemplate
             deck={deck}
             playerHand={playerHand}
             dealerHand={dealerHand}
             beginGame={BeginGame}
+            playerScore={playerScore}
+            dealerScore={dealerScore}
+            reset={reset}
+            winner={winner}
+            dealToDealer={dealToDealer}
+            dealToPlayer={dealToPlayer}
+            gameStarted={gameStarted}
         />
     )
 }
